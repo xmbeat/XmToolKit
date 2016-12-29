@@ -1,108 +1,126 @@
+/*
+ * String.cpp
+ *
+ *  Created on: 19/07/2015
+ *      Author: xmbeat
+ */
+
 #include "String.h"
-Cadena::Cadena():cadena(NULL) {
-    longitud = 0;
+
+#ifndef NULL
+#define NULL 0
+#endif
+
+String::operator const char *(){
+	return mCadena;
 }
-Cadena::operator const char *() {
-    return cadena;
+const char* String::c_str(){
+	return mCadena;
 }
-int Cadena::length() {
-    return longitud;
+int String::length(){
+	return mLongitud;
 }
-bool Cadena::operator!=(const char *c) {
+
+bool String::operator!=(const char *c) {
 	return !(*this == c);
 }
-bool Cadena::operator !=(const Cadena &c) {
+bool String::operator !=(const String &c) {
 	return !(*this == c);
 }
-void Cadena::init(const int size) {
+void String::init(const int size) {
 	if (size > 0) {
-		longitud = size;
-		cadena = new char[size + 1];
+		mLongitud = size;
+		mCadena = new char[size + 1];
 		for (int i = 0; i <= size; i++)
-			cadena[i] = 0;
+			mCadena[i] = 0;
 	} else {
-		longitud = 0;
-		cadena = NULL;
+		mLongitud = 0;
+		mCadena = NULL;
 	}
 }
-Cadena::Cadena(const int size) {
+
+String::String():mCadena(NULL) {
+	mLongitud = 0;
+}
+
+String::String(const int size) {
 	init(size);
 }
 
-Cadena::Cadena(const unsigned int size) {
+String::String(const unsigned int size) {
 	init(size);
 }
 
-Cadena::Cadena(const char *c) {
-	longitud = strLen(c);
-	if (longitud) {
-		cadena = new char[longitud + 1];
-		strCopy(cadena, c, 0, 0, 0, true);
+String::String(const char *c) {
+	mLongitud = strLen(c);
+	if (mLongitud) {
+		mCadena = new char[mLongitud + 1];
+		strCopy(mCadena, c, 0, 0, 0, true);
 	} else {
-		cadena = NULL;
+		mCadena = NULL;
 	}
 }
-Cadena::Cadena(const char c) {
-	longitud = 1;
-	cadena = new char[2];
-	cadena[0] = c;
-	cadena[1] = 0;
+String::String(const char c) {
+	mLongitud = 1;
+	mCadena = new char[2];
+	mCadena[0] = c;
+	mCadena[1] = 0;
 }
-Cadena::Cadena(const Cadena &c) :
-		cadena(NULL) {
+String::String(const String &c) :
+		mCadena(NULL) {
 	*this = c;
 }
 
-Cadena::~Cadena() {
-	delete[] cadena;
+String::~String() {
+	delete[] mCadena;
 }
-Cadena Cadena::operator +(const int& i) {
-	return *this + Cadena::toBaseString(i, 10);
+String String::operator +(const int& i) {
+	return *this + String::toBaseString(i, 10);
 }
-Cadena Cadena::operator +(const Cadena &c) {
+String String::operator +(const String &c) {
 	int longA, longB;
-	Cadena temp;
-	longA = longitud;
-	longB = c.longitud;
-	temp.longitud = longA + longB;
-	if (temp.longitud > 0) {
-		temp.cadena = new char[temp.longitud + 1];
-		strCopy(temp.cadena, cadena, 0, 0, longA);
-		strCopy(temp.cadena, c.cadena, longA, 0, longB, true);
+	String temp;
+	longA = mLongitud;
+	longB = c.mLongitud;
+	temp.mLongitud = longA + longB;
+	if (temp.mLongitud > 0) {
+		temp.mCadena = new char[temp.mLongitud + 1];
+		strCopy(temp.mCadena, mCadena, 0, 0, longA);
+		strCopy(temp.mCadena, c.mCadena, longA, 0, longB, true);
 	} else {
-		temp.longitud = 0;
-		temp.cadena = NULL;
+		temp.mLongitud = 0;
+		temp.mCadena = NULL;
 	}
 
 	return temp;
 }
 
-Cadena &Cadena::operator=(const Cadena &c) {
+String &String::operator=(const String &c) {
 	if (this != &c) {
-		delete[] cadena;
-		longitud = c.longitud;
+		if (mCadena) delete[] mCadena;
+		mLongitud = c.mLongitud;
 
-		if (longitud) {
-			cadena = new char[longitud + 1];
+		if (mLongitud) {
+			mCadena = new char[mLongitud + 1];
 
-			strCopy(cadena, c.cadena, 0, 0, longitud, true);
+			strCopy(mCadena, c.mCadena, 0, 0, mLongitud, true);
 
 		} else {
-			cadena = NULL;
+			mCadena = NULL;
 		}
 	}
 	return *this;
 }
-bool Cadena::operator==(const char *c) {
-	return *this == Cadena(c);
+bool String::operator==(const char *c) {
+	return *this == String(c);
 }
 
-bool Cadena::operator==(const Cadena &c) {
-	int b = c.longitud;
-	int a = longitud;
+bool String::operator==(const String &c) {
+	int b = c.mLongitud;
+	int a = mLongitud;
 	if (a == b) {
 		while (a--)
-			if (this->cadena[a] != c.cadena[a])
+			if (this->mCadena[a] != c.mCadena[a])
 				return false;
 
 		return true;
@@ -110,11 +128,11 @@ bool Cadena::operator==(const Cadena &c) {
 	return false;
 }
 
-Cadena &Cadena::operator+=(const Cadena &c) {
+String &String::operator+=(const String &c) {
 	return (*this = *this + c);
 }
 
-int Cadena::strLen(const char *c) {
+int String::strLen(const char *c) {
 	if (c == NULL)
 		return 0;
 	int i = 0;
@@ -123,7 +141,7 @@ int Cadena::strLen(const char *c) {
 	return (i - 1);
 }
 
-char *Cadena::strCopy(char *dest, const char *origen) {
+char *String::strCopy(char *dest, const char *origen) {
 	int i = 0;
 	if (origen != NULL) {
 		while (origen[i]) {
@@ -134,7 +152,7 @@ char *Cadena::strCopy(char *dest, const char *origen) {
 	return dest;
 }
 
-char *Cadena::strCopy(char *dest, const char *origen, int inicio, int index,
+char *String::strCopy(char *dest, const char *origen, int inicio, int index,
 		int len, bool addZero) {
 //inicio=2//index 7 len 20
 	if (origen != NULL) {
@@ -153,44 +171,44 @@ char *Cadena::strCopy(char *dest, const char *origen, int inicio, int index,
 	}
 	return dest;
 }
-Cadena Cadena::substring(int index) {
-	return substring(index, longitud - index);
+String String::substring(int index) {
+	return substring(index, mLongitud - index);
 }
 
-Cadena Cadena::substring(int index, int len) {
-	Cadena temp;
-	if (index >= 0 && index < longitud) {
+String String::substring(int index, int len) {
+	String temp;
+	if (index >= 0 && index < mLongitud) {
 		if (len > 0) {
-			len = index + len > longitud ? longitud - index : len; //en caso de que la longitud sea mayor al maximo esperado lo limito
-			temp.longitud = len;
-			temp.cadena = new char[len + 1];
-			strCopy(temp.cadena, cadena, 0, index, len, true);
+			len = index + len > mLongitud ? mLongitud - index : len; //en caso de que la mLongitud sea mayor al maximo esperado lo limito
+			temp.mLongitud = len;
+			temp.mCadena = new char[len + 1];
+			strCopy(temp.mCadena, mCadena, 0, index, len, true);
 		}
 	}
 	return temp;
 }
-/*regresa un char segun su indice en la cadena, no comprueba
- la existencia de la cadena ni su longitud, la debe hacer el programador*/
-char Cadena::charAt(int index) {
-	return cadena[index];
+/*regresa un char segun su indice en la mCadena, no comprueba
+ la existencia de la mCadena ni su mLongitud, la debe hacer el programador*/
+char String::charAt(int index) {
+	return mCadena[index];
 }
-void Cadena::setChar(int index, const char &c) {
-	cadena[index] = c;
+void String::setChar(int index, const char c) {
+	mCadena[index] = c;
 }
-bool Cadena::equals(const char *c, bool ignoreCase) {
-	return equals(Cadena(c), ignoreCase);
+bool String::equals(const char *c, bool ignoreCase) {
+	return equals(String(c), ignoreCase);
 }
 
-bool Cadena::equals(const Cadena &c, bool ignoreCase) {
+bool String::equals(const String &c, bool ignoreCase) {
 	int i = 0;
 	unsigned char byte, cmp;
-	if (longitud != c.longitud)
+	if (mLongitud != c.mLongitud)
 		return false;
-	i = longitud;
+	i = mLongitud;
 	if (ignoreCase) {
 		while (i--) {
-			byte = c.cadena[i];
-			cmp = cadena[i];
+			byte = c.mCadena[i];
+			cmp = mCadena[i];
 			if (byte > 64 && byte < 91) { //A-Z
 				if ((byte != cmp) && ((byte + 32) != cmp)) {
 					return false;
@@ -199,7 +217,7 @@ bool Cadena::equals(const Cadena &c, bool ignoreCase) {
 				if ((byte != cmp) && ((byte - 32) != cmp)) {
 					return false;
 				}
-			} else if (byte > 191 && byte < 222) { //vocales con acento ñ's etc.
+			} else if (byte > 191 && byte < 222) { //vocales con acento Ã±'s etc.
 				if ((byte != cmp) && ((byte + 32) != cmp)) {
 					return false;
 				}
@@ -212,7 +230,7 @@ bool Cadena::equals(const Cadena &c, bool ignoreCase) {
 		return true;
 	} else {
 		while (i--) {
-			if (cadena[i] != c.cadena[i])
+			if (mCadena[i] != c.mCadena[i])
 				return false;
 		}
 		return true;
@@ -220,59 +238,58 @@ bool Cadena::equals(const Cadena &c, bool ignoreCase) {
 	return false;
 }
 
-int Cadena::inString(const char *c, int index) {
-	return inString(Cadena(c), index);
+int String::inString(const char *c, int index) {
+	return inString(String(c), index);
 }
 
-int Cadena::inString(const Cadena &c, int index) {
-	int limite = longitud - c.longitud + 1;
+int String::inString(const String &c, int index) {
+	int limite = mLongitud - c.mLongitud + 1;
 	int i, j;
 	if (index < 0)
 		index = 0;
 	for (i = index; i < limite; i++) {
 		j = 0;
-		while (j < c.longitud) {
-			if (cadena[i + j] != c.cadena[j])
-				break; //j=c.longitud;
-			if (++j == c.longitud)
+		while (j < c.mLongitud) {
+			if (mCadena[i + j] != c.mCadena[j])
+				break; //j=c.mLongitud;
+			if (++j == c.mLongitud)
 				return i;
 		}
 	}
 	return -1;
 }
-void Cadena::replace(int start, int len, char *c) {
-	Cadena temp(c);
+void String::replace(int start, int len, char *c) {
+	String temp(c);
 	replace(start, len, temp);
 }
-void Cadena::replace(int start, int len, Cadena &c) {
+void String::replace(int start, int len, String &c) {
 	char *d = NULL;
 	int size, i;
-	if (start > longitud || start < 0)
+	if (start > mLongitud || start < 0)
 		return;
-	if (start + len > longitud) { //si se excede la longitud de la cadena
-		len = longitud - start;
+	if (start + len > mLongitud) { //si se excede la mLongitud de la mCadena
+		len = mLongitud - start;
 	}
-	if (len == c.longitud) { //si son de misma longitud no tiene caso volver a reservar memoria
+	if (len == c.mLongitud) { //si son de misma mLongitud no tiene caso volver a reservar memoria
 		while (len--) {
-			cadena[start + len] = c.cadena[len];
+			mCadena[start + len] = c.mCadena[len];
 		}
 	} else { //hay que eliminar y reservar memoria
-		size = longitud - len + c.longitud;
+		size = mLongitud - len + c.mLongitud;
 		if (size > 0) {
 			d = new char[size + 1]; //reservamos memoria
 			if (start > 0)
-				strCopy(d, cadena, 0, 0, start);
-			strCopy(d, c.cadena, start, 0, c.longitud);
-			if ((i = longitud - start - len) > 0)
-				strCopy(d, cadena, start + c.longitud, start + len, i, true);
-			delete[] cadena;
-			longitud = size;
-			cadena = d;
+				strCopy(d, mCadena, 0, 0, start);
+			strCopy(d, c.mCadena, start, 0, c.mLongitud);
+			if ((i = mLongitud - start - len) > 0)
+				strCopy(d, mCadena, start + c.mLongitud, start + len, i, true);
+			delete[] mCadena;
+			mLongitud = size;
+			mCadena = d;
 		}
 	}
 }
-
-double Cadena::pow(int num, int potencia) { //solo usado para no depender de Math
+static double pow(int num, int potencia) { //solo usado para no depender de Math
 	double resultado = 1;
 	for (int i = 0; i < potencia; i++) {
 		resultado *= num;
@@ -282,7 +299,7 @@ double Cadena::pow(int num, int potencia) { //solo usado para no depender de Mat
 	}
 	return resultado;
 }
-int Cadena::toInteger(Cadena str, int base) {
+int String::toInteger(String str, int base) {
 	int ret = 0;
 	for (int i = 1; i <= str.length(); i++) {
 		char curChar = str.charAt(i - 1);
@@ -298,7 +315,7 @@ int Cadena::toInteger(Cadena str, int base) {
 	return ret;
 }
 
-Cadena Cadena::toBaseString(int number, int base) {
+String String::toBaseString(int number, int base) {
 	if (!number)
 		return "0";
 	typedef unsigned char byte;
@@ -308,7 +325,7 @@ Cadena Cadena::toBaseString(int number, int base) {
 		size++;
 		rest /= base;
 	}
-	Cadena ret((unsigned int) size);
+	String ret((unsigned int) size);
 	for (byte i = 1; i <= size; i++) {
 		byte residuo = number % base;
 		number /= base;
@@ -320,10 +337,12 @@ Cadena Cadena::toBaseString(int number, int base) {
 	return ret;
 }
 
-double Cadena::strVal(const char *c) {
+//TODO: Mejorar este metodo evitando el uso de pow
+double String::strVal(const char *c) {
 	int i = 0, digito, potencia = 6, dot = 0;
 	double ret = 0;
 	bool positive = true;
+
 	while (c[i]) {
 		if (c[i] > 47 && c[i] < 58) { //digito
 			digito = c[i] - 48;
@@ -343,8 +362,8 @@ double Cadena::strVal(const char *c) {
 	return positive ? ret : -ret;
 }
 
-Cadena Cadena::strStr(double numero) {
-	Cadena temp;
+String String::strStr(double numero) {
+	String temp;
 	long int residuo, i = 10, cociente;
 	char c;
 	while (int(numero) != 0) {
@@ -352,7 +371,7 @@ Cadena Cadena::strStr(double numero) {
 		numero -= residuo;
 		residuo /= (i / 10);
 		c = residuo + 48;
-		temp = Cadena(c) + temp;
+		temp = String(c) + temp;
 		i *= 10;
 	}
 	if (numero != 0) {
@@ -372,10 +391,11 @@ Cadena Cadena::strStr(double numero) {
 		temp = "0";
 	return temp;
 }
-Cadena Cadena::string(char c, int count) {
-	Cadena ret(count);
+String String::string(char c, int count) {
+	String ret(count);
 	for (int i = 0; i < count; i++) {
 		ret.setChar(i, c);
 	}
 	return ret;
 }
+

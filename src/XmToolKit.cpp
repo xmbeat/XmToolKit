@@ -41,10 +41,10 @@ int main(int argc,char**args)
     //ventana.setMinimumSize(200,200);
     container.add(&boton,1.0f);
     container.add(&boton2,0.0f);
-    container.add(&boton3,1.0f);
+    container.add(&boton3,2.0f);
     ventana.add(&container);
     ventana.setVisible(true);
-    //boton.setVisible(true);
+    boton.setVisible(true);
     boton2.setVisible(true);
     boton3.setVisible(true);
     Listener listener;

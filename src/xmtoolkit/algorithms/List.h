@@ -7,7 +7,7 @@
 
 #ifndef LIST_H_
 #define LIST_H_
-
+//TODO: Agregar clearAndDelete con funcion callback de parametro para que el usuario defina como borrar
 template <class T>
 class List
 {

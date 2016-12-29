@@ -4,6 +4,7 @@
 namespace XmToolKit {
 //Constructor
 LinearContainer::LinearContainer() {
+	mSpace = 0;
 	mOrientation = 0;
 	mMinHeight = mMinWidth = mPreferedHeight = mPreferedWidth = 0;
 	mEnsuredHeight = 0;
@@ -14,7 +15,7 @@ LinearContainer::LinearContainer() {
 
 //Destructor
 LinearContainer::~LinearContainer() {
-
+	mChildren.clearAndDelete();
 }
 //Add method
 void LinearContainer::add(Widget*widget) {
@@ -25,7 +26,19 @@ void LinearContainer::onChangeParent() {
 		Widget::setParent(mControls[i].widget, mRawParent);
 	}
 }
+
+void LinearContainer::setSpace(int space){
+	mSpace = space;
+}
+
 void LinearContainer::add(Widget*widget, float peso) {
+	ControlProp *prop = new ControlProp;
+	prop->peso = peso;
+	prop->widget = widget;
+	if (!mChildren.contains(prop)){
+		mChildren.add(prop);
+	}
+
 	mControls[mCount].peso = peso;
 	mControls[mCount].widget = widget;
 	Widget::setParent(widget, mRawParent);
