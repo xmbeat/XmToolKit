@@ -1,0 +1,1 @@
+windres script.txt -O coff -o resource.res

@@ -1,51 +1,59 @@
-#ifndef CADENA_H
-#define CADENA_H
-#ifndef NULL
-#define NULL 0
-#endif
-class Cadena {
+/*
+ * String.h
+ *
+ *  Created on: 19/07/2015
+ *      Author: xmbeat
+ */
+
+#ifndef STRING_H_
+#define STRING_H_
+
+class String {
 private:
-	int longitud;
-	char *cadena;
-	static double pow(int, int);
+	int mLongitud;
+	char * mCadena;
 	void init(const int);
 public:
-	Cadena();
-	Cadena(const unsigned int size);
-	Cadena(const int size);
-	Cadena(char const *c);
-	Cadena(const char c);
-	Cadena(const Cadena &c);
-	~Cadena();
-	Cadena &operator=(const Cadena &c);
-	Cadena operator+(const Cadena &c);
-	Cadena operator+(const int &i);
-	bool operator==(const Cadena &c); //comprueba toda la cadena
-	bool operator==(const char *c);
-	bool operator!=(const Cadena &c);
-	bool operator!=(const char *c);
-	Cadena &operator+=(const Cadena &c);
-	operator const char *();
-	int length();
-	Cadena substring(int);
-	Cadena substring(int beginIndex, int len);
-	char charAt(int index);
-	void setChar(int index, const char &c);
-	bool equals(const char *c, bool ignoreCase = false);
-	bool equals(const Cadena &c, bool ignoreCase = false);
-	int inString(const char *c, int index = 0);
-	int inString(const Cadena &c, int index = 0); //estoy checando en saber cuando el BOM es factible
-	void replace(int start, int len, Cadena &c);
-	void replace(int start, int len, char *c);
-	int strLen(const char *c);
-	char* strCopy(char *dest, const char *origen);
-	char* strCopy(char *dest, const char *origen, int inicio, int index,
+	//Constructores
+	String();
+	String(const unsigned int size);
+	String(const int size);
+	String(const char *c);
+	String(const char c);
+	String(const String &c);
+	//Sobrecarga de operadores
+	String &operator=(const String &c);
+	String operator+(const String &c);
+	String operator+(const int &i);
+	virtual bool operator==(const String &c); //comprueba toda la cadena
+	virtual bool operator==(const char *c);
+	virtual bool operator!=(const String &c);
+	virtual bool operator!=(const char *c);
+	virtual String &operator+=(const String &c);
+	virtual operator const char *();
+	//Metodos a fines a la cadena
+	virtual int length();
+	virtual String substring(int);
+	virtual String substring(int beginIndex, int len);
+	virtual char charAt(int index);
+	virtual void setChar(int index, const char c);
+	virtual bool equals(const char *c, bool ignoreCase = false);
+	virtual bool equals(const String &c, bool ignoreCase = false);
+	virtual int inString(const char *c, int index = 0);
+	virtual int inString(const String &c, int index = 0); //estoy checando en saber cuando el BOM es factible
+	virtual void replace(int start, int len, String &c);
+	virtual void replace(int start, int len, char *c);
+	virtual int strLen(const char *c);
+	virtual char* strCopy(char *dest, const char *origen);
+	virtual char* strCopy(char *dest, const char *origen, int inicio, int index,
 			int len = 0, bool addZero = false);
-	static Cadena toBaseString(int, int);
-	static int toInteger(Cadena, int);
+	virtual const char* c_str();
+	static String toBaseString(int, int);
+	static int toInteger(String, int);
 	static double strVal(const char *);
-	static Cadena strStr(double);
-	static Cadena string(char, int);
+	static String strStr(double);
+	static String string(char, int);
+	virtual ~String();
 };
-typedef Cadena String;
-#endif
+
+#endif /* STRING_H_ */
