@@ -37,8 +37,6 @@ private:
     LinkedList<Window*> mParents;
     //Variable donde se almacena el escuchador de los eventos de la ventana
     WindowEventListener *mWindowListener;
-    //Propiedades para restringir el tamano de la ventana
-    int mMaximumSizeW,mMaximumSizeH,mMinimumSizeW,mMinimumSizeH;
     //Propiedades
     bool mIsDeleteable,mIsVisibleInTaskBar,mIsFullScreen;
     //Sirve para aplicar un bloqueo a las ventanas padres de esta, para cuando es modal
@@ -72,10 +70,6 @@ public:
     virtual void setIcon(/*GdkPixbuf *icon*/);
     virtual void setText(const char* text);
     virtual String getText();
-    virtual void setMinimumSize(int width, int height);
-    virtual void getMinimumSize(int *width, int *height);
-    virtual void setMaximumSize(int width, int height);
-    virtual void getMaximumSize(int *width, int *height);
     virtual void setDeleteable(bool value);
     virtual bool isDeleteable();
     virtual void setFullScreen(bool value);

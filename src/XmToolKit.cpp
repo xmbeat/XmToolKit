@@ -36,11 +36,20 @@ int main(int argc,char**args)
     Button boton2("Hola");
     Button boton3("Mundo");
     LinearContainer container;
-
+    Rect padding;
+    Rect margin;
     ventana.setDefaultCloseOperation(Window::EXIT_ON_CLOSE);
     //ventana.setMinimumSize(200,200);
     container.add(&boton,1.0f);
-    container.add(&boton2,0.0f);
+    padding.left = 8;
+    padding.right = 8;
+    padding.top = 8;
+    padding.bottom = 8;
+    margin = padding;
+    boton2.setMargin(margin);
+    container.setPadding(padding);
+    container.setSpacing(8);
+    container.add(&boton2,0.0f, false, true);
     container.add(&boton3,2.0f);
     ventana.add(&container);
     ventana.setVisible(true);

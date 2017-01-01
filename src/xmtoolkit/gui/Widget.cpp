@@ -4,6 +4,9 @@
 #include "EventListener.h"
 namespace XmToolKit {
 
+//STATIC FIELDS
+int Widget::MAX_SIZE = -1;
+
 stSize Widget::GetWindowPos(HWND hwnd) {
 	RECT rect;
 	POINT Pos;
@@ -77,19 +80,46 @@ DWORD Widget::getStyle() {
 		mStyle = GetWindowLongPtr(mHandle, GWL_STYLE);
 	return mStyle;
 }
+
+void Widget::setMargin(const Rect &rect) {
+	mMargin = rect;
+}
+
+void Widget::getMargin(Rect *rect) {
+	*rect = mMargin;
+}
+
 void Widget::setPosition(Widget* widget, int x, int y) {
 	::SetWindowPos(*widget, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+
 }
 void Widget::getPosition(Widget* widget, int *x, int*y) {
 	stSize pos = GetWindowPos(*widget);
-	*x = pos.x;
-	*y = pos.y;
+	if (x) {
+		*x = pos.x;
+	}
+	if (y) {
+		*y = pos.y;
+	}
 }
 void Widget::getPosition(int *x, int*y) {
-	getPosition(this, x, y);
+	if (mHandle) {
+		getPosition(this, x, y);
+	} else {
+		if (x) {
+			*x = mX;
+		}
+		if (y) {
+			*y = mY;
+		}
+	}
 }
 void Widget::setPosition(int x, int y) {
-	setPosition(this, x, y);
+	mX = x;
+	mY = y;
+	if (mHandle) {
+		setPosition(this, x, y);
+	}
 }
 bool Widget::setParent(Widget*parent) {
 	return ::SetParent(*this, *parent) != 0;
@@ -109,6 +139,49 @@ void Widget::setVisible(bool value) {
 bool Widget::isVisible() {
 	return existStyle(WS_VISIBLE);
 }
+
+void Widget::setMinimumSize(int width, int height) {
+	mMinWidth = width;
+	mMinHeight = height;
+}
+
+void Widget::getMinimumSize(int *width, int *height) {
+	if (width) {
+		*width = mMinWidth;
+	}
+	if (height) {
+		*height = mMinHeight;
+	}
+}
+
+void Widget::setMaximumSize(int width, int height) {
+	mMaxWidth = width;
+	mMaxHeight = height;
+}
+
+void Widget::getMaximumSize(int *width, int* height) {
+	if (width) {
+		*width = mMaxWidth;
+	}
+	if (height) {
+		*height = mMaxHeight;
+	}
+}
+
+void Widget::setPreferedSize(int width, int height) {
+	mPreferedWidth = width;
+	mPreferedHeight = height;
+}
+
+void Widget::getPreferedSize(int *width, int *height) {
+	if (width) {
+		*width = mPreferedWidth;
+	}
+	if (height) {
+		*height = mPreferedHeight;
+	}
+}
+
 void Widget::setSize(int width, int height) {
 	stSize pos = GetWindowPos(*this);
 	MoveWindow(mHandle, pos.x, pos.y, width, height, true);
@@ -153,8 +226,11 @@ void Widget::move(Widget* widget, int x, int y, int w, int h) {
 	MoveWindow(*widget, x, y, w, h, true);
 }
 Widget::Widget() :
-		mRawParent(0), mHandle(0), mStyle(0), mExStyle(0), mIsMouseHover(false), mResizeListener(
-				0), mMouseListener(0), mButtonListener(0), mKeyListener(0) {
+		mRawParent(0), mHandle(0), mStyle(0), mExStyle(0), mIsMouseHover(false),
+		mMinHeight(0), mMinWidth(0), mMaxHeight(0), mMaxWidth(0),
+		mPreferedWidth(0), mPreferedHeight(0), mWidth(0), mHeight(0), mX(0), mY(0),
+		mResizeListener(0), mMouseListener(0), mButtonListener(0), mKeyListener(0) {
+
 }
 Widget::~Widget() {
 	if (mHandle && IsWindow(mHandle)) {
@@ -271,11 +347,12 @@ LRESULT CALLBACK Widget::WidgetProcedure(HWND hwnd, UINT message, WPARAM wParam,
 //Magia:no tocar!
 void Widget::setParent(Widget* widget, HWND parent) {
 	widget->mRawParent = parent;
-	widget->onChangeParent();
 	::SetParent(*widget, parent);
 	::SetWindowLongPtr(*widget, GWL_STYLE,
 			(GetWindowLongPtr(*widget, GWL_STYLE) | WS_CHILD)
 					& ~(WS_BORDER | WS_CAPTION | WS_DLGFRAME));
+
+	widget->onChangeParent();
 }
 
 void Widget::onChangeParent() {

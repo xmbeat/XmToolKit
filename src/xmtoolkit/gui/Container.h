@@ -12,8 +12,17 @@ namespace XmToolKit {
 
 class Container: public Widget {
 public:
+	Container();
 	virtual void add(Widget* widget) = 0;
+	virtual void setPadding(const Rect &rect);
+	virtual void getPadding(Rect *rect);
+	virtual Rect getPadding();
+	virtual void setSpacing(int space);
+	virtual int getSpacing();
 	virtual ~Container();
+protected:
+	Rect mPadding;
+	int mSpacing;
 };
 
 } /* namespace XmToolKit */

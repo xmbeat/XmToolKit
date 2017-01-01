@@ -16,36 +16,40 @@ class LinearContainer:public Container
     public:
         LinearContainer();
         virtual void add(Widget*widget);
-        virtual void add(Widget*widget, float peso);
+        virtual void add(Widget*widget, float weight);
+        virtual void add(Widget*widget, float weight, bool verticalGrow, bool horizontalGrow);
         virtual void setSize(int width,int height);
-        virtual void getMinimumSize(int *width, int *height);
-        virtual void getPreferedSize(int *width, int*height);
         virtual void setPosition(int x, int y);
-        virtual void setSpace(int value);
         virtual ~LinearContainer();
     protected:
         virtual void onChangeParent();
     private:
         struct ControlProp{
             Widget*widget;
-            float peso;
-            stSize margin;
+            float weight;
+            bool vGrow;
+            bool hGrow;
+            int alignment;
+            ControlProp(){
+            	widget = 0;
+            	weight = 0.0f;
+            	vGrow = false;
+            	hGrow = false;
+            	alignment = 0;
+            }
             bool operator==(const ControlProp &prop){
             	return widget == prop.widget;
             }
         };
+        void calculateSizes(int, int);
+        void update();
         ArrayList<ControlProp*> mChildren;
         ControlProp mControls[10];
-        int mSpace;
+        //TODO move setMargin to Widget class
+        Rect mMargin;
         int mOrientation;
-        int mCount;
         float mTotalWeight;
-        int mMinHeight;
-        int mMinWidth;
-        int mEnsuredHeight;
-        int mPreferedHeight;
-        int mPreferedWidth;
-        int mX,mY;
+        int mFixedHeight;
 };
 } /* namespace XmToolKit */
 

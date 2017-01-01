@@ -26,14 +26,28 @@ class Widget
 		HWND mHandle;
 		DWORD mStyle, mExStyle;
 		bool mIsMouseHover;
+
+		int mMinHeight;
+		int mMinWidth;
+		int mMaxHeight;
+		int mMaxWidth;
+		int mPreferedWidth;
+		int mPreferedHeight;
+		int mWidth;
+		int mHeight;
+		int mX;
+		int mY;
+
 		struct WidgetState{
 			DWORD style;
 			DWORD exStyle;
 			stSize size;
 			int extra;
 		};
+
 		static HINSTANCE instance;
 		static stSize GetWindowPos(HWND hwnd);
+
 		virtual WidgetState* saveWidgetState(int extra = 0);
 		virtual WidgetState* getSavedWigetState();
 		virtual WidgetState* restoreWidgetState();
@@ -65,6 +79,7 @@ class Widget
 		ButtonEventListener*mButtonListener;
 		KeyEventListener*mKeyListener;
 		WidgetState mSaveState;
+		Rect mMargin;
 	public:
 		Widget();
 		virtual ~Widget();
@@ -72,22 +87,32 @@ class Widget
 		virtual operator HWND();
 		virtual void setVisible(bool value);
 		virtual bool isVisible();
-		virtual void setSize(int width, int height);
-		virtual void getSize(int*width, int*height);
 		virtual bool isEnabled();
 		virtual void setEnabled(bool value);
 		virtual String getTooltipText();
 		virtual void setTooltipText(const char* text);
+		virtual void setMargin(const Rect &rect);
+		virtual void getMargin(Rect *rect);
+
+		virtual void setSize(int width, int height);
+		virtual void getSize(int*width, int*height);
+
+		virtual void getMinimumSize(int *width, int *height);
+		virtual void setMinimumSize(int width, int height);
+		virtual void getMaximumSize(int *width, int *height);
+		virtual void setMaximumSize(int width, int height);
+		virtual void getPreferedSize(int *width, int *height);
+		virtual void setPreferedSize(int width, int height);
 		virtual void getPosition(int *x, int *y);
 		virtual void setPosition(int x, int y);
-		virtual void getMinimumSize(int *width, int *height) = 0;
-		virtual void getPreferedSize(int *width, int *height) = 0;
 		//Eventos
 		virtual void setMouseEventListener(MouseEventListener *listener);
 		virtual void setResizeEventListener(ResizeEventListener *listener);
 		virtual void setButtonEventListener(ButtonEventListener *listener);
 		virtual void setKeyEventListener(KeyEventListener*listener);
 
+		//Constante
+		static int MAX_SIZE;
 	 };
 };
 

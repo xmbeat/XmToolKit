@@ -18,6 +18,15 @@ namespace XmToolKit{
 	wchar_t* toUTF16(const char* utf8);
 	char* toUTF8(wchar_t* utf16);
 
+	struct Rect {
+		int left;
+		int top;
+		int right;
+		int bottom;
+		Rect(){
+			left = top = right = bottom = 0;
+		}
+	};
 	struct stSize {
 		int x;
 		int y;
