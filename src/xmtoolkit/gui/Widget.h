@@ -37,6 +37,7 @@ class Widget
 		int mHeight;
 		int mX;
 		int mY;
+		int mBackgroundColor;
 
 		struct WidgetState{
 			DWORD style;
@@ -96,7 +97,8 @@ class Widget
 
 		virtual void setSize(int width, int height);
 		virtual void getSize(int*width, int*height);
-
+		virtual void setBackgroundColor(int color);
+		virtual int getBackgroundColor();
 		virtual void getMinimumSize(int *width, int *height);
 		virtual void setMinimumSize(int width, int height);
 		virtual void getMaximumSize(int *width, int *height);

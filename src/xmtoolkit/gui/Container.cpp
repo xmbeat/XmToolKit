@@ -2,6 +2,7 @@
 namespace XmToolKit {
 
 Container::Container(){
+	mSpacing = 0;
 }
 
 void Container::getPadding(Rect *padding) {

@@ -42,11 +42,13 @@ namespace XmToolKit{
 			height = _height;
 		}
 	};
-
+	class Canvas;
+	class Graphics;
 	class Widget;
 	class Container;
 	class Window;
 	class Button;
+	class CheckBox;
 	class EventListener;
 	class Event;
 	class MouseEvent;

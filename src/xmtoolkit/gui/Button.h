@@ -17,6 +17,7 @@ class Button: public Widget
         Button(const char*text = 0);
         virtual ~Button();
     protected:
+        static LRESULT CALLBACK ButtonProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
     private:
 };
 

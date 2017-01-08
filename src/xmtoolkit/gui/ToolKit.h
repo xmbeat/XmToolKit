@@ -15,10 +15,12 @@
 #include "Widget.h"
 #include "Window.h"
 #include "Button.h"
+#include "Canvas.h"
+#include "CheckBox.h"
 #include "Container.h"
 #include "LinearContainer.h"
 #include "Event.h"
 #include "EventListener.h"
-
-
+#include "Graphics.h"
+#include "GUIException.h"
 #endif /* XMTOOLKIT_GUI_TOOLKIT_H_ */
